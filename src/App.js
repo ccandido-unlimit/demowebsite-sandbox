@@ -137,7 +137,7 @@ const App = () => {
     const fiatCurrency = fiat; // A moeda fiat a ser usada
     const cryptoAmount = amount; // Usando o valor da quantidade de criptomoeda que será vendida
   
-    const urlOfframp = `https://offramp-sandbox.gatefi.com/?merchantId=baa2d9f8-6ff0-48e9-babf-709c9007ffbe&cryptoCurrency=${crypto}&payment=${payment}&payout=${payout}&fiatCurrency=${fiatCurrency}&region=${region}&wallet=${wallet}&walletLock=true&fiatCurrencyLock=true&cryptoCurrencyLock=true&cryptoAmount=${cryptoAmount}&redirectUrl=https://www.unlimit.com`; // Mudança aqui para cryptoAmount
+    const urlOfframp = `https://offramp-sandbox.gatefi.com/?merchantId=baa2d9f8-6ff0-48e9-babf-709c9007ffbe&cryptoCurrency=${crypto}&payment=${payment}&fiatCurrency=${fiatCurrency}&region=${region}&wallet=${wallet}&walletLock=true&fiatCurrencyLock=true&cryptoCurrencyLock=true&cryptoAmount=${cryptoAmount}&redirectUrl=https://www.unlimit.com`; // Mudança aqui para cryptoAmount
   
     window.open(urlOfframp, '_blank'); // Abre a URL nova em uma aba.
   };
@@ -188,6 +188,7 @@ const App = () => {
           <select className="payment-form" type="text" value={payment} onChange={(e) => setPayment(e.target.value)}>
             <option value="PIX">PIX</option>
             <option value="SPEI">SPEI</option>
+            <option value="SEPA">SEPA</option>
           </select>
         </label>
 
