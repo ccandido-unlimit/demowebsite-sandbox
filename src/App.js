@@ -16,35 +16,35 @@ const App = () => {
   const [isSelling, setIsSelling] = useState(false); // Controle para saber se estamos na função de venda
 
   const fetchQuote = useCallback(async () => {
-    setLoading(true); // Inicia o carregamento
+    setLoading(true);
     try {
-      const response = await axios.get(`/onramp/v1/quotes`, {
-        params: {
-          partnerAccountId: 'baa2d9f8-6ff0-48e9-babf-709c9007ffbe',
-          payment: payment,
-          crypto: crypto,
-          fiat: fiat,
-          amount: amount,
-          region: region,
-          wallet: wallet,
-          redirectUrl: "https://www.unlimit.com" // Garantindo que a URL está formatada corretamente
-        },
+      const url = `https://api-sandbox.gatefi.com/onramp/v1/quotes?partnerAccountId=baa2d9f8-6ff0-48e9-babf-709c9007ffbe&payment=${payment}&crypto=${crypto}&fiat=${fiat}&amount=${amount}&region=${region}&wallet=${wallet}&redirectUrl=https://www.unlimit.com`;  // URL completa
+  
+      const response = await fetch(url, {
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'api-key': process.env.REACT_APP_API_KEY, // Variável de ambiente
+          'api-key': process.env.REACT_APP_API_KEY, // Verifique se a variável está definida corretamente
           'signature': 'dd32b38bc3cd9046ce0d09699c770deaf43fe4f9c06eebc649ecc4ba76802930',
         },
       });
-      setResultOnramp(response.data); // Armazena o resultado
-      setError(null); // Limpa erros anteriores
-    } catch (err) {
-      console.error("Erro ao buscar dados:", err.response?.data || err.message); // Log de erro
-      setError("Erro ao buscar os dados"); // Mensagem de erro para o usuário
-      setResultOnramp(null); // Limpa o resultado
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      setResultOnramp(data);
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setError("Erro ao buscar os dados");
+      setResultOnramp(null);
     } finally {
-      setLoading(false); // Finaliza o estado de carregamento
+      setLoading(false);
     }
   }, [amount, payment, crypto, fiat, region, wallet]);
+
+  //offramp
   const fetchOfframpQuote = useCallback(async () => {
     setLoading(true);
     try {
