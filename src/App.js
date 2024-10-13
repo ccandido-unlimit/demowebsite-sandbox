@@ -16,65 +16,43 @@ const App = () => {
   const [isSelling, setIsSelling] = useState(false); // Controle para saber se estamos na função de venda
 
   const fetchQuote = useCallback(async () => {
-    setLoading(true); // Inicia o carregamento
-    try {
-        // Montar os parâmetros de consulta como uma string
-        const params = new URLSearchParams({
-          partnerAccountId: 'baa2d9f8-6ff0-48e9-babf-709c9007ffbe',
-          payment,
-          crypto,
-          fiat,
-          amount,
-          region,
-          wallet,
-          redirectUrl: "https://www.unlimit.com"
-      }).toString();
-      
-      const response = await axios.get(`onramp/v1/quotes`, {
-          params: {
-            partnerAccountId: 'baa2d9f8-6ff0-48e9-babf-709c9007ffbe',
-            payment,
-            fiat,
-            crypto,
-            region,
-            amount, 
-            wallet,
-          },
-          headers: {
-            'Accept': 'application/json',
-            'api-key': process.env.REACT_APP_API_KEY,
-                'signature': 'dd32b38bc3cd9046ce0d09699c770deaf43fe4f9c06eebc649ecc4ba76802930',
-            },
-        });
-        setResultOnramp(response.data);
-        setError(null);
-      } catch (err) {
-        setError("Erro ao buscar os dados");
-        setResultOnramp(null);
-      } finally {
-        setLoading(false);
-      }
-    }, [amount, payment, crypto, fiat, region, wallet]);
-  const fetchOfframpQuote = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`offramp/v1/quotes`, {
+      const response = await axios.get(`/api/onramp`, {
         params: {
           partnerAccountId: 'baa2d9f8-6ff0-48e9-babf-709c9007ffbe',
           payment,
           fiat,
           crypto,
           region,
-          cryptoAmount: amount, // Use 'cryptoAmount' aqui
+          amount, 
           wallet,
-        },
-        headers: {
-          'Accept': 'application/json',
-          'api-key': process.env.REACT_APP_API_KEY,
-          'signature': 'f6262b4049b424fee9ae5e1148a224cf300adef8cd11de69789c42fa8762f19c',
-        },
+        }
       });
-
+      setResultOnramp(response.data);
+      setError(null);
+    } catch (err) {
+      setError("Erro ao buscar os dados");
+      setResultOnramp(null);
+    } finally {
+      setLoading(false);
+    }
+  }, [amount, payment, crypto, fiat, region, wallet]);
+  
+  const fetchOfframpQuote = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`/api/offramp`, {
+        params: {
+          partnerAccountId: 'baa2d9f8-6ff0-48e9-babf-709c9007ffbe',
+          payment,
+          fiat,
+          crypto,
+          region,
+          cryptoAmount: amount,
+          wallet,
+        }
+      });
       setResultOfframp(response.data);
       setError(null);
     } catch (err) {
