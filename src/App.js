@@ -18,7 +18,7 @@ const App = () => {
   const fetchQuote = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`/api/onramp/v1/quotes`, {
+      const response = await axios.get(`/api/onramp/v1/quotes${params}`, {
         params: {
           partnerAccountId: 'baa2d9f8-6ff0-48e9-babf-709c9007ffbe',
           payment,
