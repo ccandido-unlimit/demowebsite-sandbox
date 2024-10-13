@@ -3,13 +3,12 @@ import axios from 'axios';
 import './App.css';
 
 const App = () => {
-  const [amount, setAmount] = useState(""); // O valor padrão se refere ao valor de compra/venda em criptomoedas
+  const [amount, setAmount] = useState(""); // Valor de compra/venda
   const [payment, setPayment] = useState("PIX"); // Método de pagamento
   const [crypto, setCrypto] = useState("ETH"); // Criptomoeda
   const [fiat, setFiat] = useState("BRL"); // Moeda Fiat
   const [wallet, setWallet] = useState("0xc458f721D11322E36f781a9C58055de489178BF2");
   const [region, setRegion] = useState("BR"); // Região
-  const [countries, setCountries] = useState([]); // Estado para armazenar os países
   const [resultOnramp, setResultOnramp] = useState(null); // Resultado da compra
   const [resultOfframp, setResultOfframp] = useState(null); // Resultado da venda
   const [error, setError] = useState(null); // Erro na requisição
@@ -37,8 +36,6 @@ const App = () => {
   //   fetchCountries(); // Chama a função para buscar os países no carregamento do componente
   // }, [fetchCountries]);
 
-
-
   const fetchQuote = useCallback(async () => {
     setLoading(true);
     try {
@@ -55,7 +52,7 @@ const App = () => {
         },
         headers: {
           'Content-Type': 'application/json',
-          'api-key': 'fGhKXIdWINsjKFuMZpnKqPrlWOIGocRE',
+          'api-key': process.env.REACT_APP_API_KEY,
           'signature': 'dd32b38bc3cd9046ce0d09699c770deaf43fe4f9c06eebc649ecc4ba76802930',
         },
       });
@@ -83,11 +80,11 @@ const App = () => {
         },
         headers: {
           'Accept': 'application/json',
-          'api-key': 'fGhKXIdWINsjKFuMZpnKqPrlWOIGocRE',
+          'api-key': process.env.REACT_APP_API_KEY,
           'signature': 'f6262b4049b424fee9ae5e1148a224cf300adef8cd11de69789c42fa8762f19c',
         },
       });
-  
+
       setResultOfframp(response.data);
       setError(null);
     } catch (err) {
@@ -133,12 +130,12 @@ const App = () => {
   };
 
   const handleButtonClickOfframp = () => {
-    const payout = amountOutOfframp; // Payout relacionado ao resultado da venda
+    // const payout = amountOutOfframp; // Payout relacionado ao resultado da venda
     const fiatCurrency = fiat; // A moeda fiat a ser usada
     const cryptoAmount = amount; // Usando o valor da quantidade de criptomoeda que será vendida
-  
+
     const urlOfframp = `https://offramp-sandbox.gatefi.com/?merchantId=baa2d9f8-6ff0-48e9-babf-709c9007ffbe&cryptoCurrency=${crypto}&payment=${payment}&fiatCurrency=${fiatCurrency}&region=${region}&wallet=${wallet}&walletLock=true&fiatCurrencyLock=true&cryptoCurrencyLock=true&cryptoAmount=${cryptoAmount}&redirectUrl=https://www.unlimit.com`; // Mudança aqui para cryptoAmount
-  
+
     window.open(urlOfframp, '_blank'); // Abre a URL nova em uma aba.
   };
 
@@ -193,7 +190,10 @@ const App = () => {
         </label>
 
         <p></p>
-        <button type="submit" className="submit-button">Get Quote</button>
+        <button type="submit" className="submit-button" disabled={loading}>
+          {loading ? 'Carregando...' : 'Get Quote'}
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+        </button>
       </form>
 
       <div>
