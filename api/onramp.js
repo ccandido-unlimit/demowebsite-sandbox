@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     const { query } = req; // Captura a query da requisição
 
     try {
-        const response = await axios.get('https://api-sandbox.gatefi.com/onramp/v1/quotes', {
+        const response = await axios.get('https://api-sandbox.gatefi.com', {
             params: {
                 partnerAccountId: 'baa2d9f8-6ff0-48e9-babf-709c9007ffbe',
                 ...query,  // Passa todos os parâmetros da requisição

@@ -30,31 +30,31 @@ const App = () => {
           redirectUrl: "https://www.unlimit.com"
       }).toString();
       
-      const response = await fetch(`/api/onramp?${params}`, {
-          method: 'GET', // ou 'POST', dependendo do que você precisa
+      const response = await axios.get(`onramp/v1/quotes`, {
+          params: {
+            partnerAccountId: 'baa2d9f8-6ff0-48e9-babf-709c9007ffbe',
+            payment,
+            fiat,
+            crypto,
+            region,
+            amount, 
+            wallet,
+          },
           headers: {
-              'Content-Type': 'application/json',
-                'api-key': process.env.REACT_APP_API_KEY, // Variável de ambiente
+            'Accept': 'application/json',
+            'api-key': process.env.REACT_APP_API_KEY,
                 'signature': 'dd32b38bc3cd9046ce0d09699c770deaf43fe4f9c06eebc649ecc4ba76802930',
             },
         });
-
-        // Processar a resposta
-        if (!response.ok) {
-            throw new Error(`Erro HTTP! status: ${response.status}`);
-        }
-
-        const data = await response.json(); // Parse JSON da resposta
-        setResultOnramp(data); // Armazena o resultado
-        setError(null); // Limpa erros anteriores
-    } catch (err) {
-        console.error("Erro ao buscar dados:", err.message); // Log de erro
-        setError("Erro ao buscar os dados"); // Mensagem de erro para o usuário
-        setResultOnramp(null); // Limpa o resultado
-    } finally {
-        setLoading(false); // Finaliza o estado de carregamento
-    }
-}, [amount, payment, crypto, fiat, region, wallet]);
+        setResultOnramp(response.data);
+        setError(null);
+      } catch (err) {
+        setError("Erro ao buscar os dados");
+        setResultOnramp(null);
+      } finally {
+        setLoading(false);
+      }
+    }, [amount, payment, crypto, fiat, region, wallet]);
   const fetchOfframpQuote = useCallback(async () => {
     setLoading(true);
     try {
