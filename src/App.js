@@ -15,60 +15,40 @@ const App = () => {
   const [loading, setLoading] = useState(false); // Indicador de carregamento
   const [isSelling, setIsSelling] = useState(false); // Controle para saber se estamos na função de venda
 
-  // const fetchCountries = useCallback(async () => {
-  //   try {
-  //     const response = await axios.get(`/onramp/v1/configuration`, {
-  //       headers: {
-  //         'signature': '09d661b0004afe735c70b08a73660ef84565e786c6d09b002ab604712c32060c',
-  //         'Content-Type': 'application/json',
-  //         'api-key': 'fGhKXIdWINsjKFuMZpnKqPrlWOIGocRE',
-  //       },
-  //     });
-  //     setCountries(response.data.countries || []); // Presume que a estrutura da resposta tenha uma lista de países
-  //   } catch (err) {
-  //     console.error("Erro ao buscar países:", err);
-  //     setError("Erro ao buscar países");
-  //   }
-  // }, []);
-
-
-  // useEffect(() => {
-  //   fetchCountries(); // Chama a função para buscar os países no carregamento do componente
-  // }, [fetchCountries]);
-
   const fetchQuote = useCallback(async () => {
-    setLoading(true);
+    setLoading(true); // Inicia o carregamento
     try {
       const response = await axios.get(`/onramp/v1/quotes`, {
         params: {
           partnerAccountId: 'baa2d9f8-6ff0-48e9-babf-709c9007ffbe',
-          payment,
-          crypto,
-          fiat,
-          amount,
-          region,
-          wallet,
-          redirectUrl: "www.unlimit.com" // Adiciona o redirectUrl aqui
+          payment: payment,
+          crypto: crypto,
+          fiat: fiat,
+          amount: amount,
+          region: region,
+          wallet: wallet,
+          redirectUrl: "https://www.unlimit.com" // Garantindo que a URL está formatada corretamente
         },
         headers: {
           'Content-Type': 'application/json',
-          'api-key': process.env.REACT_APP_API_KEY,
+          'api-key': process.env.REACT_APP_API_KEY, // Variável de ambiente
           'signature': 'dd32b38bc3cd9046ce0d09699c770deaf43fe4f9c06eebc649ecc4ba76802930',
         },
       });
-      setResultOnramp(response.data);
-      setError(null);
+      setResultOnramp(response.data); // Armazena o resultado
+      setError(null); // Limpa erros anteriores
     } catch (err) {
-      setError("Erro ao buscar os dados");
-      setResultOnramp(null);
+      console.error("Erro ao buscar dados:", err.response?.data || err.message); // Log de erro
+      setError("Erro ao buscar os dados"); // Mensagem de erro para o usuário
+      setResultOnramp(null); // Limpa o resultado
     } finally {
-      setLoading(false);
+      setLoading(false); // Finaliza o estado de carregamento
     }
   }, [amount, payment, crypto, fiat, region, wallet]);
   const fetchOfframpQuote = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`/offramp/v1/quotes`, {
+      const response = await axios.get(`offramp/v1/quotes`, {
         params: {
           partnerAccountId: 'baa2d9f8-6ff0-48e9-babf-709c9007ffbe',
           payment,
@@ -125,7 +105,7 @@ const App = () => {
     const payout = amountOutOnramp || amountOutOfframp; // Use a saída correta de acordo com a operação
     const fiatCurrency = isSelling ? fiat : fiat; // Aqui, você pode usar o valor que deseja
 
-    const urlOnramp = `https://onramp-sandbox.gatefi.com/?merchantId=baa2d9f8-6ff0-48e9-babf-709c9007ffbe&cryptoCurrency=${crypto}&payment=${payment}&payout=${payout}&fiatCurrency=${fiatCurrency}&region=${region}&wallet=${wallet}&walletLock=true&fiatCurrencyLock=true&cryptoCurrencyLock=true&fiatAmount=${amount}&redirectUrl=https://www.unlimit.com`;
+    const urlOnramp = `https://onramp-sandbox.gatefi.com/?merchantId=baa2d9f8-6ff0-48e9-babf-709c9007ffbe&cryptoCurrency=${crypto}&payment=${payment}&payout=${payout}&fiatCurrency=${fiatCurrency}&region=${region}&wallet=${wallet}&walletLock=true&fiatCurrencyLock=true&cryptoCurrencyLock=true&fiatAmount=${amount}`;
     window.open(urlOnramp, '_blank');
   };
 
