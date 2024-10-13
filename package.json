@@ -8,8 +8,7 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.0",
-    "homepage": "https://ccandido-unlimit.github.io/quotes-endpoint"
+    "web-vitals": "^2.1.0"
   },
   "scripts": {
     "predeploy": "npm run build",
@@ -37,8 +36,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://api-sandbox.gatefi.com",
-  "devDependencies": {
-    "gh-pages": "^6.2.0"
-  }
+  "proxy": "https://api-sandbox.gatefi.com"
 }
