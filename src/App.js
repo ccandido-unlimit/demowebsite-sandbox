@@ -31,7 +31,7 @@ const App = () => {
         }).toString();
 
         // Enviar a requisição para a URL com os parâmetros de consulta
-        const response = await fetch(`/onramp/v1/quotes?${params}`, {
+        const response = await fetch(`api/onramp/v1/quotes?${params}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
