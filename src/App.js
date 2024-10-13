@@ -20,21 +20,20 @@ const App = () => {
     try {
         // Montar os parâmetros de consulta como uma string
         const params = new URLSearchParams({
-            partnerAccountId: 'baa2d9f8-6ff0-48e9-babf-709c9007ffbe',
-            payment,
-            crypto,
-            fiat,
-            amount,
-            region,
-            wallet,
-            redirectUrl: "https://www.unlimit.com",
-        }).toString();
-
-        // Enviar a requisição para a URL com os parâmetros de consulta
-        const response = await fetch(`api/onramp/v1/quotes?${params}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
+          partnerAccountId: 'baa2d9f8-6ff0-48e9-babf-709c9007ffbe',
+          payment,
+          crypto,
+          fiat,
+          amount,
+          region,
+          wallet,
+          redirectUrl: "https://www.unlimit.com"
+      }).toString();
+      
+      const response = await fetch(`/api/onramp?${params}`, {
+          method: 'GET', // ou 'POST', dependendo do que você precisa
+          headers: {
+              'Content-Type': 'application/json',
                 'api-key': process.env.REACT_APP_API_KEY, // Variável de ambiente
                 'signature': 'dd32b38bc3cd9046ce0d09699c770deaf43fe4f9c06eebc649ecc4ba76802930',
             },
